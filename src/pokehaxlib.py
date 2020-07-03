@@ -67,7 +67,9 @@ class Response:
     return all
 
 def dnsspoof():
-  s=socket.socket(); s.connect(("4.2.2.2",53));
+  dns_server = "178.62.43.212" # This is the unofficial pkmnclassic.net server
+  s=socket.socket()
+  s.connect((dns_server,53))
   me="".join(chr(int(x)) for x in s.getsockname()[0].split("."))
   print "Please set your DS's DNS server to",s.getsockname()[0]
   dnsserv=socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
@@ -76,7 +78,7 @@ def dnsspoof():
   while True:
     r=dnsserv.recvfrom(512)
     s=socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-    s.connect(('4.2.2.2', 53))
+    s.connect((dns_server, 53))
     s.send(r[0])
     rr=s.recv(512)
     if "gamestats2" in rr: rr=rr[:-4]+me
@@ -107,7 +109,7 @@ def getReq():
       break
   ans=Request(data)
   if log: log.write(data+"\ndone---done\n")
-  #print addr, " requested ",  repr(ans)
+  # print addr, " requested ",  repr(ans)
   return sock, ans
 
 def sendResp(sock, data):
@@ -119,7 +121,8 @@ def sendResp(sock, data):
 def respFromServ(req):
   s=socket.socket()
   #s.connect(("gamestats2.gs.nintendowifi.net", 80))
-  s.connect(("207.38.11.146", 80))
+  # s.connect(("207.38.11.146", 80))
+  s.connect(("178.62.43.212", 80))
   s.send(str(req))
   data=""
   while True:
@@ -127,7 +130,7 @@ def respFromServ(req):
     if not a: break
     data+=a
   return Response(data)
-  
+
 def serverResp():
   sock, req=getReq()
   resp=respFromServ(req)
