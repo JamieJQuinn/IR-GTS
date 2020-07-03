@@ -13,7 +13,7 @@ The script was originally developed by Infinite Recursion and has been unofficia
 
 ## How-To
 
-First, launch the 'ir-gts.py' file, either by double-clicking or from a command prompt. This will give you an IP address to use for your DS' DNS Settings (available from the network configuration screen). After you've changed the Primary DNS accordingly, choose an option from the main menu by typing a letter and pressing (Enter):
+Download and unzip the latest release from <github.com/JamieJQuinn/IR-GTS/releases>. Then launch the 'ir-gts.py' file, either by double-clicking or from a command prompt. This will give you an IP address to use for your DS' DNS Settings (available from the network configuration screen). After you've changed the Primary DNS accordingly, choose an option from the main menu by typing a letter and pressing (Enter):
 
 `s`: **Send a Pokemon to the DS game**
 
