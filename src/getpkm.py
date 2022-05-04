@@ -17,6 +17,7 @@ from binascii import hexlify
 from array import array
 from namegen import namegen
 from stats import statread
+from os import mkdir
 import os.path, subprocess, platform
 
 def makepkm(bytes):
@@ -44,6 +45,8 @@ def makepkm(bytes):
 
 def save(path, data):
     saved = False
+    if not os.path.isdir('Pokemon'):
+        mkdir('Pokemon')
 
     while not saved:
         fullpath = os.path.normpath('Pokemon' + os.sep + path)
