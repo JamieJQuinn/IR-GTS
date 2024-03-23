@@ -1,9 +1,11 @@
 #!/usr/bin/python
 
-from pokehaxlib import *
-from pkmlib import encode
-from boxtoparty import makeparty
-from gbatonds import makends
+from __future__ import print_function
+from __future__ import absolute_import
+from .pokehaxlib import *
+from .pkmlib import encode
+from .boxtoparty import makeparty
+from .gbatonds import makends
 from sys import argv, exit
 from platform import system
 import os.path
@@ -11,10 +13,10 @@ import os.path
 def sendpkm():
     token = 'c9KcX1Cry3QKS2Ai7yxL6QiQGeBGeQKR'
 
-    print 'Note: you must exit the GTS before sending a pkm'
-    print 'Enter the path or drag the pkm file here'
+    print('Note: you must exit the GTS before sending a pkm')
+    print('Enter the path or drag the pkm file here')
 
-    path = raw_input().strip()
+    path = input().strip()
     path = os.path.normpath(path)
     if system() != 'Windows':
         path = path.replace('\\', '')
@@ -25,30 +27,30 @@ def sendpkm():
 
         # Adding extra 100 bytes of party data
         if len(pkm) != 236 and len(pkm) != 136:
-            print 'Invalid filesize.'
+            print('Invalid filesize.')
             return
         if len(pkm) == 136:
-            print 'PC-Boxed Pokemon! Adding party data...',
+            print('PC-Boxed Pokemon! Adding party data...', end=' ')
             pkm = makeparty(pkm)
-            print 'done.'
+            print('done.')
 
-        print 'Encoding!'
+        print('Encoding!')
         bin = encode(pkm)
     elif path.lower().endswith('.3gpkm'):
-        print 'Converting GBA file to NDS format...',
+        print('Converting GBA file to NDS format...', end=' ')
         with open(path, 'rb') as f:
             pkm = f.read()
 
         if len(pkm) != 80 and len(pkm) != 100:
-            print 'Invalid filesize.'
+            print('Invalid filesize.')
             return
         pkm = makends(pkm)
-        print 'done.'
+        print('done.')
 
-        print 'Encoding!'
+        print('Encoding!')
         bin = encode(pkm)
     else:
-        print 'Filename must end in .pkm or .3gpkm'
+        print('Filename must end in .pkm or .3gpkm')
         return
 
     # Adding GTS data to end of file
@@ -65,7 +67,7 @@ def sendpkm():
 
     sent = False
     delete = False
-    print 'Ready to send; you can now enter the GTS...'
+    print('Ready to send; you can now enter the GTS...')
     while not sent:
         sock, req = getReq()
         a = req.action
@@ -73,7 +75,7 @@ def sendpkm():
             sendResp(sock, token)
         elif a == 'info':
             sendResp(sock, '\x01\x00')
-            print 'Connection Established.'
+            print('Connection Established.')
         elif a == 'setProfile': sendResp(sock, '\x00' * 8)
         elif a == 'post': sendResp(sock, '\x0c\x00')
         elif a == 'search': sendResp(sock, '')
@@ -82,4 +84,4 @@ def sendpkm():
             sendResp(sock, '\x01\x00')
             sent = True
 
-    print 'Pokemon sent successfully.',
+    print('Pokemon sent successfully.', end=' ')

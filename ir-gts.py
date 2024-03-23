@@ -7,6 +7,7 @@
 #
 # - Infinite Recursion
 
+from __future__ import print_function
 from src import gtsvar
 from src.pokehaxlib import initServ
 from src.getpkm import getpkm
@@ -19,35 +20,35 @@ import os
 s = system()
 if s == 'Darwin' or s == 'Linux':
     if os.getuid() != 0:
-        print 'Program must be run as superuser. Enter your password below',
-        print 'if prompted.'
+        print('Program must be run as superuser. Enter your password below', end=' ')
+        print('if prompted.')
         os.system('sudo ' + argv[0] + ' root')
         exit(0)
 
-print gtsvar.version
+print(gtsvar.version)
 
 initServ()
 sleep(1)
 
 done = False
 while True:
-    print 'Choose an option:'
-    print 's - send pkm to game', 'r - receive pkm from game'
-    print 'm - receive multiple pkms from game', 'q - quit'
-    option = raw_input().strip().lower()
+    print('Choose an option:')
+    print('s - send pkm to game', 'r - receive pkm from game')
+    print('m - receive multiple pkms from game', 'q - quit')
+    option = input().strip().lower()
 
     if option.startswith('s'): sendpkm()
     elif option.startswith('r'): getpkm()
     elif option.startswith('m'):
-        print 'Press ctrl + c to return to main menu'
+        print('Press ctrl + c to return to main menu')
         while True:
             try: getpkm()
             except KeyboardInterrupt: break
     elif option.startswith('q'):
-        print 'Quitting program'
+        print('Quitting program')
         break
     else:
-        print 'Invalid option, try again'
+        print('Invalid option, try again')
         continue
 
-    print 'Returning to main menu'
+    print('Returning to main menu')
