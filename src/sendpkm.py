@@ -11,7 +11,7 @@ from platform import system
 import os.path
 
 def sendpkm():
-    token = 'c9KcX1Cry3QKS2Ai7yxL6QiQGeBGeQKR'
+    token = b'c9KcX1Cry3QKS2Ai7yxL6QiQGeBGeQKR'
 
     print('Note: you must exit the GTS before sending a pkm')
     print('Enter the path or drag the pkm file here')
@@ -55,15 +55,15 @@ def sendpkm():
 
     # Adding GTS data to end of file
     bin += pkm[0x08:0x0a] # id
-    if ord(pkm[0x40]) & 0x04: bin += '\x03' # Gender
-    else: bin += chr((ord(pkm[0x40]) & 2) + 1)
-    bin += pkm[0x8c] # Level
-    bin += '\x01\x00\x03\x00\x00\x00\x00\x00' # Requesting bulba, either, any
-    bin += '\x00' * 20 # Timestamps and PID
+    if ord(bytes([pkm[0x40]])) & 0x04: bin += b'\x03' # Gender
+    else: bin += bytes([((ord(bytes([pkm[0x40]])) & 2) + 1)])
+    bin += bytes([pkm[0x8c]]) # Level
+    bin += b'\x01\x00\x03\x00\x00\x00\x00\x00' # Requesting bulba, either, any
+    bin += b'\x00' * 20 # Timestamps and PID
     bin += pkm[0x68:0x78] # OT Name
     bin += pkm[0x0c:0x0e] # OT ID
-    bin += '\xDB\x02' # Country, City
-    bin += '\x46\x00\x07\x02' # Sprite, Exchanged (?), Version, Lang
+    bin += b'\xDB\x02' # Country, City
+    bin += b'\x46\x00\x07\x02' # Sprite, Exchanged (?), Version, Lang
 
     sent = False
     delete = False
@@ -73,15 +73,15 @@ def sendpkm():
         a = req.action
         if len(req.getvars) == 1:
             sendResp(sock, token)
-        elif a == 'info':
-            sendResp(sock, '\x01\x00')
+        elif a == b'info':
+            sendResp(sock, b'\x01\x00')
             print('Connection Established.')
-        elif a == 'setProfile': sendResp(sock, '\x00' * 8)
-        elif a == 'post': sendResp(sock, '\x0c\x00')
-        elif a == 'search': sendResp(sock, '')
-        elif a == 'result': sendResp(sock, bin)
-        elif a == 'delete':
-            sendResp(sock, '\x01\x00')
+        elif a == b'setProfile': sendResp(sock, b'\x00' * 8)
+        elif a == b'post': sendResp(sock, b'\x0c\x00')
+        elif a == b'search': sendResp(sock, b'')
+        elif a == b'result': sendResp(sock, bin)
+        elif a == b'delete':
+            sendResp(sock, b'\x01\x00')
             sent = True
 
     print('Pokemon sent successfully.', end=' ')
