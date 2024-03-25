@@ -1,8 +1,9 @@
-import namegen
-import stats
+from __future__ import absolute_import
+from . import namegen
+from . import stats
 from array import array
 from datetime import date
-from boxtoparty import makeparty
+from .boxtoparty import makeparty
 
 def makends(gba):
     # Deconstructing GBA .3gpkm file

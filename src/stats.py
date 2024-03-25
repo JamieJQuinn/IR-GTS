@@ -1,9 +1,10 @@
+from __future__ import absolute_import
 from array import array
-from namegen import namegen
+from .namegen import namegen
 
 def statread(pkm):
     p = array('B')
-    p.fromstring(pkm)
+    p = bytearray(pkm)
 
     pid = p[0x00] + (p[0x01] << 8) + (p[0x02] << 16) + (p[0x03] << 24)
     nickname = namegen(pkm[0x48:0x5e])

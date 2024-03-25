@@ -3,8 +3,9 @@
 # by the games.
 
 from __future__ import division
+from __future__ import absolute_import
 from array import array
-from stats import evcheck, ivcheck
+from .stats import evcheck, ivcheck
 
 pkm = None
 
