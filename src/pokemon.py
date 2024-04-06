@@ -1,9 +1,10 @@
 from struct import unpack, pack
 from base64 import b64decode
 from .util import Util, Gen4CharMap
-import os, datetime, logging
+from .loghandler import LogHandler
+import os, datetime
 
-
+pokemon_logging = LogHandler('pokemon', 'pokemon.log').get_logger()
 class PokemonData:  # Singleton
     _instance = None
     def __new__(cls):
@@ -434,14 +435,14 @@ class Pokemon:
 
         file_exists, file_path = self.file_exists(directory, base_name)
         if file_exists:
-            logging.warning(f'Pokemon already saved under {file_path}. Skipping save.')
+            pokemon_logging.warning(f'Pokemon already saved under {file_path}. Skipping save.')
             return
         
         file_name = f"{directory}/{base_name}_{current_time}.{extension}"
         with open(file_name, 'wb') as f:
             f.write(self.data)
 
-        logging.info(f'{file_name} saved successfully.')
+        pokemon_logging.info(f'{file_name} saved successfully.')
 
 
     def file_exists(self, directory='Pokemon', base_name=None, extension='pkm'):
@@ -454,7 +455,7 @@ class Pokemon:
         return False, None
 
 
-    def dump(self, file_name='statlog.txt'):
+    def dump(self, file_name='statlog.log'):
         ivs = self.get_ivs()
         evs = self.get_evs()
         hp_type, hp_power = self.get_hidden_power()
@@ -483,8 +484,9 @@ class Pokemon:
             assert len(self.data) == 236 or len(self.data) == 136, 'Invalid filesize.'
             if len(self.data) == 136:
                 self.data = self.add_battle_stats(self.data)
+            pokemon_logging.info(f'{file} loaded successfully.')
             return self.data
-        logging.info('Filename must end in .pkm')
+        pokemon_logging.info('Filename must end in .pkm')
 
 
     def add_battle_stats(self, pokemon):
