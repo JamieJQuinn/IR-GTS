@@ -1,5 +1,5 @@
+import os
 import json
-import struct
 
 class Util:
     @staticmethod
@@ -39,5 +39,11 @@ class Gen4CharMap(Util):
         return [self.decode_character(char) for char in characters]
 
 
-        
-                    
+def get_pkms():
+    pkm_files = []
+    for item in os.listdir('/Pokemon/'):
+        if '.pkm' in item[-4:]:
+            pkm_files.append(item)
+    if not pkm_files:
+        return [None]
+    return pkm_files

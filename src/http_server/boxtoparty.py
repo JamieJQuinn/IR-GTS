@@ -5,7 +5,8 @@
 from __future__ import division
 from __future__ import absolute_import
 from array import array
-from src.pokemon import PokemonData
+
+from pokemon import PokemonData
 
 pkm = None
 

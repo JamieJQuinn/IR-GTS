@@ -1,4 +1,4 @@
 __pycache__
 .vs
-pokemon/
-*.log
+Pokemon/*
+logs/*

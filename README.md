@@ -4,10 +4,10 @@ This Python script allows the hosting of a HTTP server to which retail Nintendo 
 
 ## Requirements
 
-- Python 3.8 (Available from http://www.python.org)
+- Docker (Available from https://www.docker.com/)
 - Generation 4 Pokemon game
 - Wireless network (WEP or passwordless)
-- Administrator priviliges
+- Administrator priviliges for installing docker
 
 ## Installation
 
@@ -19,9 +19,9 @@ git clone https://github.com/DevreeseJorik/IR-GTS-MG.git
 ```bash
 cd /path/to/project/root
 ```
-3. Install all dependencies using pip
+3. run docker compose
 ```bash
-pip install -r requirements.txt
+docker compose up
 ```
 
 ## Setting up the network
@@ -62,12 +62,15 @@ The exact steps to perform this are highly dependent on the router/provider you 
 
 # Usage
 
-1. Run the main.py script to start the DNS spoofer and HTTP server:
+1. edit the docker-compose.yaml and replace YOUR_HOST_IP_HERE with your computer's IP address
+- Linux: ifconfig
+- Windows: ipconfig
+2. Run docker compose to start the DNS spoofer and HTTP server:
 ```bash
-python3 main.py
+docker compose up
 ```
-2. Make note of the 'Primary DNS server' ip address provided by the script, as it will be required for the next step.
-3. On your Nintendo DS:
+3. Make note of the 'Primary DNS server' ip address provided by the script, as it will be required for the next step.
+4. On your Nintendo DS:
 - Boot up the game and navigate to `NINTENDO WFC SETTINGS`, then `Nintendo Wi-FI Connection Settings`.
 - Create a new connection and connect to the insecure network.
 - Set the Primary DNS to the IP address provided by the script. The Secondary should be left blank/the same as the Primary.
@@ -76,18 +79,16 @@ python3 main.py
 
 to send a Pokémon file using the GTS (Global Trade Station), follow these steps:
 
-1. Enter the GTS within the Pokémon game.
-2. When prompted, type/copy-and-paste the file path to the PKM file you want to send. For example:
-- If the file is located at `C:\Users\InfiniteRecursion\MAWILE.pkm`, insert the full path.
-- If the file is located within the `Pokemon` directory within the `ir-gts` folder, you can simply insert `Pokemon\MAWILE.pkm`.
-- Alternatively, you can drag the file into the prompt window, and it will automatically enter the path for you.
+1. go to http://HOST_MACHINE_IP/pokemondpds/worldexchange/select to choose the pkm file you want to send
+2. Enter the GTS within the Pokémon game.
+3. When prompted, type/copy-and-paste the file path to the PKM file you want to send. For example:
 - After a short time, the Pokémon will appear on the DS and be placed in either an empty spot in your party or the first available PC box. This can take a few seconds, as for some reason the connection for this command is rather slow.
 
 Note: Sending more than one Pokémon at a time is not currently possible. You'll need to exit and re-enter the GTS to send another Pokémon.
 
 **Receive a Pokemon from the DS game**
 
-Whenever you `offer` a Pokemon in the GTS, it's data will be received  on the host machine automatically. You will receive an error on the DS stating that the Pokemon cannot be offered for trade - this ensures the Pokémon remains in your game. On your host machine it will automatically save the Pokémon under the `Pokemon` directory in the root of the project. It will check if the Pokémon's data has been saved before, to prevent creating duplicates.
+Whenever you `offer` a Pokemon in the GTS, it's data will be received on the host machine automatically. You will receive an error on the DS stating that the Pokemon cannot be offered for trade - this ensures the Pokémon remains in your game. On your host machine it will automatically save the Pokémon under the `Pokemon` directory in the root of the project. It will check if the Pokémon's data has been saved before, to prevent creating duplicates.
 
 
 ## Support
