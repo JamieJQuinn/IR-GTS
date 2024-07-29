@@ -1,0 +1,18 @@
+version: '3.9'
+
+services:
+  dns:
+    environment:
+      - IP=192.168.1.51
+    build: ./src/dns_server
+    ports:
+      - "53:53/udp"
+
+  http_server:
+    volumes:
+      - ./pkms:/pkms
+    build: ./src/http_server
+    depends_on:
+      - dns
+    ports:
+      - 80:80

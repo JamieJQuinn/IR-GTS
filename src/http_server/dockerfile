@@ -1,0 +1,16 @@
+FROM python:3.8.10
+
+WORKDIR /http_server_service
+COPY . .
+
+ENV PYTHONUNBUFFERED 1
+ENV PYTHONPATH=/code
+ENV LC_ALL=C.UTF-8
+ENV LANG=C.UTF-8
+
+EXPOSE 80/tcp
+
+RUN pip3 install --upgrade setuptools pip wheel
+RUN pip3 install -r requirements.txt
+
+CMD python3 main.py

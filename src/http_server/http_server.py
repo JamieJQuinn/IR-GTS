@@ -1,14 +1,15 @@
-from flask import Flask, Response, request
-from flask_classful import FlaskView, route
-from .pokemon import B64EncodedPokemon, Pokemon
-from .loghandler import LogHandler
-import os, logging
+import os
 
-http_logging = LogHandler('http_server', 'network.log').get_logger()
-gts_logging = LogHandler('gts_server', 'network.log').get_logger()
-wc_logging = LogHandler('wc_server', 'network.log').get_logger()
-werkzeug_logging = logging.getLogger('werkzeug')
-werkzeug_logging.setLevel(logging.ERROR)
+from flask import Flask, Response, request, render_template
+from flask_classful import FlaskView, route
+from loguru import logger
+
+from pokemon import B64EncodedPokemon, Pokemon
+from util import get_pkms
+
+http_logging = logger.bind(resource='http_server')
+gts_logging = logger.bind(resource='gts_server')
+wc_logging = logger.bind(wc_server='wc_server')
 
 class GTSResponse(Response):
     def __init__(self, response=None, status=None, headers=None, content_type=None, **kwargs):
@@ -41,12 +42,36 @@ def handle_request():
             return GTSResponse('c9KcX1Cry3QKS2Ai7yxL6QiQGeBGeQKR')
 
 class GTSServer(FlaskView):
-    route_base = '/pokemondpds/worldexchange'
+    route_base = '/pokemondpds'
+    try:
+        selected_pkm_path = f'/pkms/{get_pkms()[0]}'
+    except Exception:
+        selected_pkm_path = None
 
     def __init__(self):
         self.token = 'c9KcX1Cry3QKS2Ai7yxL6QiQGeBGeQKR'
 
-    @route('/info.asp', methods=['GET'])
+    @route('/worldexchange/selected', methods=['GET'])
+    def selected(self):
+        return self.selected_pkm_path, 200
+
+    @route('/worldexchange/list_options', methods=['GET'])
+    def list_options(self):
+        pkm_files = get_pkms()
+        return render_template('list_options.html', pkm_files=pkm_files)
+
+    @route('/worldexchange/select', methods=['POST'])
+    def select_option(self):
+        pkm_file = request.args.get('pkm')
+        if not pkm_file:
+            return f'no value provided', 400
+        os.path.join('/pkms/', pkm_file)
+        if f'/pkms/{pkm_file}' not in os.listdir('/pkms/'):
+            return f'{pkm_file} not found in /pkms', 400
+        self.selected_pkm_path = os.path.join('/pkms', pkm_file)
+        return f'hosting {pkm_file}', 200
+
+    @route('/worldexchange/info.asp', methods=['GET'])
     def info(self):
         gts_logging.info('Connection Established.')
         return GTSResponse(b'\x01\x00')
@@ -55,7 +80,7 @@ class GTSServer(FlaskView):
     def set_profile(self):
         return GTSResponse(b'\x00' * 8)
 
-    @route('/post.asp', methods=['GET'])
+    @route('/worldexchange/post.asp', methods=['GET'])
     def post(self):
         
         gts_logging.info('Receiving Pokemon...')
@@ -64,19 +89,15 @@ class GTSServer(FlaskView):
         pokemon.dump()
         return GTSResponse(b'\x0c\x00')
 
-    @route('/search.asp', methods=['GET'])
+    @route('/worldexchange/search.asp', methods=['GET'])
     def search(self):
         return GTSResponse(b'')
 
-    @route('/result.asp', methods=['GET'])
+    @route('/worldexchange/result.asp', methods=['GET'])
     def result(self):
-        
-        print('Enter the path or drag the pkm file here')
-        print('Leave blank to not send a Pokémon')
-        path = input().strip()
+        path = self.selected_pkm_path
 
         if path:
-            path = os.path.normpath(path).lower()
             pokemon = Pokemon()
             pokemon_data = pokemon.load(path)
 
@@ -96,7 +117,7 @@ class GTSServer(FlaskView):
 
         return GTSResponse(b'\x05\x00')
 
-    @route('/delete.asp', methods=['GET'])
+    @route('/worldexchange/delete.asp', methods=['GET'])
     def delete(self):
         return GTSResponse(b'\x01\x00')
 
