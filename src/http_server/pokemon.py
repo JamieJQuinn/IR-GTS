@@ -4,6 +4,9 @@ from base64 import b64decode
 
 from loguru import logger
 
+start_time = datetime.datetime.now()
+logger.add(f"/logs/{start_time.strftime('%Y%m%d%H%M%S')}")
+
 from util import Util, Gen4CharMap
 
 class PokemonData:  # Singleton
@@ -439,7 +442,7 @@ class Pokemon:
             logger.warning(f'Pokemon already saved under {file_path}. Skipping save.')
             return
         
-        file_name = f"{directory}/{base_name}_{current_time}.{extension}"
+        file_name = f"/{directory}/{base_name}_{current_time}.{extension}"
         with open(file_name, 'wb') as f:
             f.write(self.data)
 

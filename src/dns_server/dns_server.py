@@ -1,3 +1,4 @@
+from datetime import datetime
 import socket, threading
 import dns.message
 import dns.query
@@ -5,6 +6,8 @@ import dns.resolver
 import dns.reversename
 from loguru import logger
 
+start_time = datetime.now()
+logger.add(f"/logs/{start_time.strftime('%Y%m%d%H%M%S')}")
 
 class DNSServer:
     def __init__(self, dns_ip:str="178.62.43.212", prox_ip=None) -> None:

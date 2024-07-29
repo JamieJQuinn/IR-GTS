@@ -41,7 +41,9 @@ class Gen4CharMap(Util):
 
 def get_pkms():
     pkm_files = []
-    for item in os.listdir('/pkms/'):
+    for item in os.listdir('/Pokemon/'):
         if '.pkm' in item[-4:]:
             pkm_files.append(item)
+    if not pkm_files:
+        return [None]
     return pkm_files

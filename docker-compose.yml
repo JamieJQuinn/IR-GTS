@@ -10,7 +10,8 @@ services:
 
   http_server:
     volumes:
-      - ./pkms:/pkms
+      - ./Pokemon:/Pokemon
+      - ./logs:/logs
     build: ./src/http_server
     depends_on:
       - dns

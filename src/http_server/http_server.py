@@ -1,4 +1,5 @@
 import os
+from datetime import datetime
 
 from flask import Flask, Response, request, render_template
 from flask_classful import FlaskView, route
@@ -7,9 +8,17 @@ from loguru import logger
 from pokemon import B64EncodedPokemon, Pokemon
 from util import get_pkms
 
+start_time = datetime.now()
+logger.add(f"/logs/{start_time.strftime('%Y%m%d%H%M%S')}")
 http_logging = logger.bind(resource='http_server')
 gts_logging = logger.bind(resource='gts_server')
 wc_logging = logger.bind(wc_server='wc_server')
+
+selected_pkm_path = None
+try:
+    selected_pkm_path = f'/Pokemon/{get_pkms()[0]}'
+except Exception:
+    selected_pkm_path = None
 
 class GTSResponse(Response):
     def __init__(self, response=None, status=None, headers=None, content_type=None, **kwargs):
@@ -43,32 +52,33 @@ def handle_request():
 
 class GTSServer(FlaskView):
     route_base = '/pokemondpds'
-    try:
-        selected_pkm_path = f'/pkms/{get_pkms()[0]}'
-    except Exception:
-        selected_pkm_path = None
 
     def __init__(self):
         self.token = 'c9KcX1Cry3QKS2Ai7yxL6QiQGeBGeQKR'
 
     @route('/worldexchange/selected', methods=['GET'])
     def selected(self):
-        return self.selected_pkm_path, 200
+        global selected_pkm_path
+        return str(selected_pkm_path), 200
 
     @route('/worldexchange/list_options', methods=['GET'])
     def list_options(self):
-        pkm_files = get_pkms()
+        pkm_files = ['None']
+        pkm_files.extend(get_pkms())
         return render_template('list_options.html', pkm_files=pkm_files)
 
     @route('/worldexchange/select', methods=['POST'])
     def select_option(self):
-        pkm_file = request.args.get('pkm')
+        global selected_pkm_path
+        pkm_file = request.form.get('pkm')
         if not pkm_file:
             return f'no value provided', 400
-        os.path.join('/pkms/', pkm_file)
-        if f'/pkms/{pkm_file}' not in os.listdir('/pkms/'):
-            return f'{pkm_file} not found in /pkms', 400
-        self.selected_pkm_path = os.path.join('/pkms', pkm_file)
+        if pkm_file == 'None':
+            selected_pkm_path = None
+            return f"hosting {selected_pkm_path}", 200
+        if pkm_file not in os.listdir('/Pokemon/'):
+            return f'{pkm_file} not found in /Pokemon', 400
+        selected_pkm_path = os.path.join('/Pokemon', pkm_file)
         return f'hosting {pkm_file}', 200
 
     @route('/worldexchange/info.asp', methods=['GET'])
@@ -95,7 +105,8 @@ class GTSServer(FlaskView):
 
     @route('/worldexchange/result.asp', methods=['GET'])
     def result(self):
-        path = self.selected_pkm_path
+        global selected_pkm_path
+        path = selected_pkm_path
 
         if path:
             pokemon = Pokemon()
