@@ -1,4 +1,4 @@
-dnspython==1.16.0
-Flask==3.0.2
-Flask-Classful==0.16.0
-colorlog==6.8.2
+dnspython==2.2.1
+Flask==2.0.3
+Flask-Classful==0.14.2
+colorlog==6.9.0

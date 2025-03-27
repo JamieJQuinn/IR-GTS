@@ -1,7 +1,7 @@
 from src.dns_server import DNSServer
-from src.http_server import app
+from src.http_server import app, runAsHttp, runAsHttps
 from platform import system
-import os
+import os, threading
 
 def has_privileges():
     """Check if the program is run with superuser privileges."""
@@ -14,6 +14,8 @@ def has_privileges():
 if has_privileges():
     dns_server = DNSServer()
     dns_server.start()
-
-    app.run(host='0.0.0.0', port=80, debug=False)
-
+    
+    httpServer = threading.Thread(target=runAsHttp)
+    httpsServer = threading.Thread(target=runAsHttps)
+    httpServer.start()
+    httpsServer.start()

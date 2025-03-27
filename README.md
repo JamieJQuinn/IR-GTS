@@ -2,26 +2,29 @@
 
 This Python script allows the hosting of a HTTP server to which retail Nintendo DS cartridges can connect. It makes use of the PokemonClassic network to get the required certificates. It enables transferring Pokémon to and from retail Nintendo DS cartridges, and sending Wonder Cards. It is compatible with all Generation-IV Pokémon games (Diamond, Pearl, Platinum, HeartGold, SoulSilver).
 
+For wonder card support Python 3.6 is needed because it still supports the insecure SSL3 protocol with the RC4 ciphers. The only protocol/ciphers the DS understands.
+
 ## Requirements
 
-- Python 3.8 (Available from http://www.python.org)
+- Python 3.6 (Available for Windows from https://github.com/adang1345/PythonWindows/tree/master/3.6.15)
 - Generation 4 Pokemon game
 - Wireless network (WEP or passwordless)
 - Administrator priviliges
 
 ## Installation
 
-1. Clone the repository to your local machine: (or download and extract the `.zip` file)
+1. For Windows Users: Install Python 3.6 but without changing the PATH environment variable so it doesn't come into conflict with other Python installations.
+2. Clone the repository to your local machine: (or download and extract the `.zip` file)
 ```bash
 git clone https://github.com/DevreeseJorik/IR-GTS-MG.git
 ```
-2. Navigate to the root of the project
+3. Navigate to the root of the project
 ```bash
 cd /path/to/project/root
 ```
-3. Install all dependencies using pip
+4. Install all dependencies using pip.
 ```bash
-pip install -r requirements.txt
+path/to/python3.6/installation/python.exe -m pip install -r requirements.txt --trusted-host pypi.python.org
 ```
 
 ## Setting up the network
@@ -64,7 +67,7 @@ The exact steps to perform this are highly dependent on the router/provider you 
 
 1. Run the main.py script to start the DNS spoofer and HTTP server:
 ```bash
-python3 main.py
+path/to/python3.6/installation/python main.py
 ```
 2. Make note of the 'Primary DNS server' ip address provided by the script, as it will be required for the next step.
 3. On your Nintendo DS:
@@ -89,6 +92,10 @@ Note: Sending more than one Pokémon at a time is not currently possible. You'll
 
 Whenever you `offer` a Pokemon in the GTS, it's data will be received  on the host machine automatically. You will receive an error on the DS stating that the Pokemon cannot be offered for trade - this ensures the Pokémon remains in your game. On your host machine it will automatically save the Pokémon under the `Pokemon` directory in the root of the project. It will check if the Pokémon's data has been saved before, to prevent creating duplicates.
 
+**Send a Wonder Card**
+
+1. Receive a wonder card over WFC like you normally would.
+2. When prompted enter the path to the wonder card file. (On Windows to easily get your file path hold the shift key while pressing the right mouse button on the file and select Copy Path)
 
 ## Support
 
