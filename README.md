@@ -4,7 +4,7 @@ This Python script allows the hosting of a HTTP server to which retail Nintendo 
 
 ## Requirements
 
-- Python 3.8 (Available from http://www.python.org)
+- Python 3.11 (Available from http://www.python.org)
 - Generation 4 Pokemon game
 - Wireless network (WEP or passwordless)
 - Administrator priviliges
@@ -89,6 +89,11 @@ Note: Sending more than one Pokémon at a time is not currently possible. You'll
 
 Whenever you `offer` a Pokemon in the GTS, it's data will be received  on the host machine automatically. You will receive an error on the DS stating that the Pokemon cannot be offered for trade - this ensures the Pokémon remains in your game. On your host machine it will automatically save the Pokémon under the `Pokemon` directory in the root of the project. It will check if the Pokémon's data has been saved before, to prevent creating duplicates.
 
+**Send a Wonder Card**
+
+For this to work you need to disable HTTPS. AR codes to disable HTTPS can be found here: https://github.com/barronwaffles/dwc_network_server_emulator/wiki/AR-Codes
+1. Receive a wonder card over WFC like you normally would.
+2. When prompted enter the path to the wonder card file. (On Windows to easily get your file path hold the shift key while pressing the right mouse button on the file and select Copy Path)
 
 ## Support
 
