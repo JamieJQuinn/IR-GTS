@@ -91,7 +91,7 @@ Whenever you `offer` a Pokemon in the GTS, it's data will be received  on the ho
 
 **Send a Wonder Card**
 
-For this to work you need to disable HTTPS. AR codes to disable HTTPS can be found here: https://github.com/barronwaffles/dwc_network_server_emulator/wiki/AR-Codes
+For this to work you need to disable HTTPS. AR codes to disable HTTPS can be found here: https://github.com/barronwaffles/dwc_network_server_emulator/wiki/AR-Codes. If you don't want to disable HTTPS you can use the branch wondercard_support, but it needs a Python 3.6.
 1. Receive a wonder card over WFC like you normally would.
 2. When prompted enter the path to the wonder card file. (On Windows to easily get your file path hold the shift key while pressing the right mouse button on the file and select Copy Path)
 

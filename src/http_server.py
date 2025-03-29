@@ -42,12 +42,12 @@ def handle_request():
             return GTSResponse('c9KcX1Cry3QKS2Ai7yxL6QiQGeBGeQKR')
 
 class GTSServer(FlaskView):
-    route_base = '/pokemondpds/worldexchange'
+    route_base = '/pokemondpds'
 
     def __init__(self):
         self.token = 'c9KcX1Cry3QKS2Ai7yxL6QiQGeBGeQKR'
 
-    @route('/info.asp', methods=['GET'])
+    @route('/worldexchange/info.asp', methods=['GET'])
     def info(self):
         gts_logging.info('Connection Established.')
         return GTSResponse(b'\x01\x00')
@@ -56,7 +56,7 @@ class GTSServer(FlaskView):
     def set_profile(self):
         return GTSResponse(b'\x00' * 8)
 
-    @route('/post.asp', methods=['GET'])
+    @route('/worldexchange/post.asp', methods=['GET'])
     def post(self):
         
         gts_logging.info('Receiving Pokemon...')
@@ -65,11 +65,11 @@ class GTSServer(FlaskView):
         pokemon.dump()
         return GTSResponse(b'\x0c\x00')
 
-    @route('/search.asp', methods=['GET'])
+    @route('/worldexchange/search.asp', methods=['GET'])
     def search(self):
         return GTSResponse(b'')
 
-    @route('/result.asp', methods=['GET'])
+    @route('/worldexchange/result.asp', methods=['GET'])
     def result(self):
         
         print('Enter the path or drag the pkm file here')
@@ -97,7 +97,7 @@ class GTSServer(FlaskView):
 
         return GTSResponse(b'\x05\x00')
 
-    @route('/delete.asp', methods=['GET'])
+    @route('/worldexchange/delete.asp', methods=['GET'])
     def delete(self):
         return GTSResponse(b'\x01\x00')
 

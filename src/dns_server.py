@@ -60,10 +60,10 @@ class DNSServer:
             if answer.rdtype == dns.rdatatype.A:
                 new_rdatas = dns.rdataset.Rdataset(answer.rdclass, answer.rdtype)
                 for rd in answer:
-                    dns_logging.debug("DNS returns IP {} for {}".format(rd.address, answer.name))
+                    dns_logging.debug(f"DNS returns IP {rd.address} for {answer.name}")
                     for domain in ["gamestats2.gs.nintendowifi.net", "dls1.ilostmymind.xyz"]:
                         if answer.name == dns.name.from_text(domain):
-                            dns_logging.debug("Changing IP for {} from {} to {}".format(answer.name, rd.address, self.proxy_ip))
+                            dns_logging.debug(f"Changing IP for {answer.name} from {rd.address} to {self.proxy_ip}")
                             new_rdatas.add(rd.replace(address=self.proxy_ip), answer.ttl)
                 if len(new_rdatas) == 1:
                     answer.clear()
