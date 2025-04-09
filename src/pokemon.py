@@ -431,18 +431,18 @@ class Pokemon:
             os.makedirs(directory)
 
         current_time = datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
-        base_name = f"{self.get_species_id()}_{self.get_name()}"
+        base_name = "{}_{}".format(self.get_species_id(), self.get_name())
 
         file_exists, file_path = self.file_exists(directory, base_name)
         if file_exists:
-            pokemon_logging.warning(f'Pokemon already saved under {file_path}. Skipping save.')
+            pokemon_logging.warning('Pokemon already saved under {}. Skipping save.'.format(file_path))
             return
         
-        file_name = f"{directory}/{base_name}_{current_time}.{extension}"
+        file_name = "{}/{}_{}.{}".format(directory, base_name, current_time, extension)
         with open(file_name, 'wb') as f:
             f.write(self.data)
 
-        pokemon_logging.info(f'{file_name} saved successfully.')
+        pokemon_logging.info('{} saved successfully.'.format(file_name))
 
 
     def file_exists(self, directory='Pokemon', base_name=None, extension='pkm'):
@@ -459,18 +459,20 @@ class Pokemon:
         ivs = self.get_ivs()
         evs = self.get_evs()
         hp_type, hp_power = self.get_hidden_power()
-        dump = f"{self.get_name()}:{'Shiny' if self.is_shiny() else ''}\n    " \
-                f"Level {self.get_level()} {self.get_nature()} {self.get_species()} with {self.get_ability()} ({self.get_gender().capitalize()})\n\n    " \
-                f"OT: {self.get_trainer_name()}, ID: {self.get_trainer_id()}, Secret ID: {self.get_trainer_secret_id()}\n    " \
-                f"Holding: {self.get_held_item()}, Happiness: {self.get_friendship()}\n    " \
-                f"Hidden Power: {hp_type}-type (Power {hp_power})\n\n    " \
-                f"Moves: {', '.join(self.get_moves())}\n\n    " \
-                f"IVs: HP {ivs['hp']}, Atk {ivs['atk']}, Def {ivs['def']}, " \
-                f"SpA {ivs['spa']}, SpD {ivs['spd']}, Spe {ivs['spe']}\n    " \
-                f"EVs: HP {evs['hp']}, Atk {evs['atk']}, Def {evs['def']}, " \
-                f"SpA {evs['spa']}, SpD {evs['spd']}, Spe {evs['spe']}, " \
-                f"Total {self.get_evs()['total']}\n\n" \
-                f"{'=' * 80}\n\n"
+        dump = "{}:{}\n    " \
+                "Level {} {} {} with {} ({})\n\n    " #\
+                #"OT: {}, ID: {}, Secret ID: {}\n    " \
+                #"Holding: {}, Happiness: {}\n    " \
+                #"Hidden Power: {}-type (Power {})\n\n    " \
+                #"Moves: {}\n\n    " \
+                #"IVs: HP {}, Atk {}, Def {}, " \
+                #"SpA {}, SpD {}, Spe {}\n    " \
+                #"EVs: HP {}, Atk {}, Def {}, " \
+                #"SpA {}, SpD {}, Spe {}, " \
+                #"Total {}\n\n" \
+                #"{}\n\n"
+        dump = dump.format(self.get_name(), 'Shiny' if self.is_shiny() else '', self.get_level(), self.get_nature(), self.get_species(), self.get_ability(), self.get_gender().capitalize(), self.get_trainer_name(), self.get_trainer_id(), self.get_trainer_secret_id(), 
+            self.get_held_item(), self.get_friendship(), hp_type, hp_power, self.get_moves(), ', '.join(), ivs['hp'], ivs['atk'], ivs['def'], ivs['spa'], ivs['spd'], ivs['spe'], evs['hp'], evs['atk'], evs['def'], evs['spa'], evs['spd'], evs['spe'], self.get_evs()['total'], '=' * 80)
 
         with open(file_name, 'a', encoding='utf-8') as f:
             f.write(dump)
@@ -484,7 +486,7 @@ class Pokemon:
             assert len(self.data) == 236 or len(self.data) == 136, 'Invalid filesize.'
             if len(self.data) == 136:
                 self.data = self.add_battle_stats(self.data)
-            pokemon_logging.info(f'{file} loaded successfully.')
+            pokemon_logging.info('{} loaded successfully.'.format(file))
             return self.data
         pokemon_logging.info('Filename must end in .pkm')
 

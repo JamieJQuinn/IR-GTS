@@ -10,7 +10,7 @@ class Util:
 
 class Gen4CharMap(Util):
     def __init__(self):
-        self.character_map: dict = self.load_json('./data/char_map.json').get("characters", {})
+        self.character_map = self.load_json('./data/char_map.json').get("characters", {})
 
 
     def encode_character(self, char_id):
